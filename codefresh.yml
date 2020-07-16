@@ -1,6 +1,6 @@
-version: '1.0'
+version: "1.0"
 stages:
-  - prepare   
+  - prepare
   - build
   - deploy
 steps:
@@ -8,49 +8,49 @@ steps:
     title: Cloning main repository...
     stage: prepare
     type: git-clone
-    repo: 'austinlparker/otel-todo'
+    repo: "austinlparker/otel-todo"
     revision: master
-    git: github    
+    git: github
   build_server_image:
     title: Building Server Docker Image
     stage: build
     type: build
     image_name: aparker/todo-server
     working_directory: ./server
-    tags: 
+    tags:
       - ${{CF_SHORT_REVISION}}
       - latest
-    dockerfile: Dockerfile  
+    dockerfile: Dockerfile
     on_success:
       metadata:
         set:
-          - '${{build_server_image.imageId}}':
-            - CF_QUALITY: true
-            - Performance: true
-            - Latency: ".89" 
-            - Test_Coverage: "83%"
-            - JIRA: "https://codefresh-io.atlassian.net/browse/MKTG-12"
+          - "${{build_server_image.imageId}}":
+              - CF_QUALITY: true
+              - Performance: true
+              - Latency: ".89"
+              - Test_Coverage: "83%"
+              - JIRA: "https://codefresh-io.atlassian.net/browse/MKTG-12"
   build_client_image:
     title: Building Client Docker Image
     stage: build
     type: build
     image_name: aparker/todo-client
     working_directory: ./client
-    tags: 
+    tags:
       - ${{CF_SHORT_REVISION}}
       - latest
-    dockerfile: Dockerfile  
+    dockerfile: Dockerfile
     on_success:
       metadata:
         set:
-          - '${{build_client_image.imageId}}':
-            - CF_QUALITY: true
-            - Performance: true
-            - Latency: ".89" 
-            - Test_Coverage: "83%"
-            - JIRA: "https://codefresh-io.atlassian.net/browse/MKTG-12"
+          - "${{build_client_image.imageId}}":
+              - CF_QUALITY: true
+              - Performance: true
+              - Latency: ".89"
+              - Test_Coverage: "83%"
+              - JIRA: "https://codefresh-io.atlassian.net/browse/MKTG-12"
   deploy_chart:
-    image: 'codefresh/cfstep-helm:3.1.1'
+    image: "codefresh/cfstep-helm:3.1.1"
     title: Deploying Helm chart
     stage: deploy
     when:
@@ -60,15 +60,15 @@ steps:
     env:
       name: todo-prod
       endpoints:
-      - name: client
-        url: http://35.223.88.219
-      - name: server
-        url: http://104.198.253.217:9000
+        - name: client
+          url: http://35.223.88.219
+        - name: server
+          url: http://104.198.253.217:9000
       type: helm-release
       change: ${{CF_COMMIT_MESSAGE}}
       filters:
-      - cluster: cf-demo
-        releaseName: otel-todo-prod
+        - cluster: cf-demo
+          releaseName: otel-todo-prod
     environment:
       - CHART_REF=helm
       - RELEASE_NAME=otel-todo-prod
@@ -78,4 +78,4 @@ steps:
       - VALUE_buildID='${{CF_BUILD_ID}}'
       - VALUE_image_pullSecret=codefresh-generated-docker.io-dockerhub-default
       - VALUE_lightstepKey=${{LS_KEY}}
-      - VALUE_server_replicas=5
+      - VALUE_server_replicas=1
