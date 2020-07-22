@@ -8,7 +8,7 @@ steps:
     title: Cloning main repository...
     stage: prepare
     type: git-clone
-    repo: "austinlparker/otel-todo"
+    repo: "ejoreo/otel-todo"
     revision: master
     git: github
   build_server_image:
