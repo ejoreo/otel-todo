@@ -19,7 +19,7 @@ public class CatFactController {
   @GetMapping("/fact")
   public CatFact catFact() {
     try {
-      Thread.sleep(2000)
+      Thread.sleep(2000);
       return getCatFact();
     } catch (Exception e) {
       return new CatFact("some cats throw exceptions.");
