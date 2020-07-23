@@ -2,6 +2,7 @@ package com.legitimatebusiness.todo;
 
 import java.io.IOException;
 import java.net.URL;
+import java.lang.*;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -18,6 +19,7 @@ public class CatFactController {
   @GetMapping("/fact")
   public CatFact catFact() {
     try {
+      Thread.sleep(2000)
       return getCatFact();
     } catch (Exception e) {
       return new CatFact("some cats throw exceptions.");
